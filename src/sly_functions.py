@@ -142,13 +142,14 @@ def upload_pointclouds(
 ) -> list:
     """Get pcd files and upload to project."""
     pointclouds_infos = None
+    batch_size = 10 if len(pcd_names) >= 10 else len(pcd_names)
     for batch_names, batch_paths, batch_hashes in progress_bar(
         zip(
-            sly.batched(seq=pcd_names, batch_size=10),
-            sly.batched(seq=pcd_paths, batch_size=10),
-            sly.batched(seq=pcd_hashes, batch_size=10),
+            sly.batched(seq=pcd_names, batch_size=batch_size),
+            sly.batched(seq=pcd_paths, batch_size=batch_size),
+            sly.batched(seq=pcd_hashes, batch_size=batch_size),
         ),
-        total=len(pcd_paths) // 10,
+        total=len(pcd_paths) // batch_size,
         message="Dataset: {!r} pointclouds".format(dataset_name),
     ):
         res_batch_names, res_batch_paths = get_items_in_dataset(
@@ -171,6 +172,8 @@ def upload_related_images(
     """Upload related images to corresponding pointclouds in project."""
     pointclouds_ids = [pointcloud_info.id for pointcloud_info in pointclouds_infos]
     pointclouds_names = [pointcloud_info.name for pointcloud_info in pointclouds_infos]
+
+    batch_size = 10 if len(pointclouds_ids) >= 10 else len(pointclouds_ids)
     for (
         batch_rel_images_paths,
         batch_pointclouds_ids,
@@ -178,12 +181,12 @@ def upload_related_images(
         batch_rel_images_meta_paths,
     ) in progress_bar(
         zip(
-            sly.batched(seq=pcd_rel_images_paths, batch_size=10),
-            sly.batched(seq=pointclouds_ids, batch_size=10),
-            sly.batched(seq=pointclouds_names, batch_size=10),
-            sly.batched(seq=pcd_rel_images_meta_paths, batch_size=10),
+            sly.batched(seq=pcd_rel_images_paths, batch_size=batch_size),
+            sly.batched(seq=pointclouds_ids, batch_size=batch_size),
+            sly.batched(seq=pointclouds_names, batch_size=batch_size),
+            sly.batched(seq=pcd_rel_images_meta_paths, batch_size=batch_size),
         ),
-        total=len(pcd_rel_images_paths) // 10,
+        total=len(pcd_rel_images_paths) // batch_size,
         message="Dataset: {!r} related images".format(dataset_name),
     ):
         images_infos = []
