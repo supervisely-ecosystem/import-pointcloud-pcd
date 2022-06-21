@@ -1,5 +1,5 @@
 {
-    "name": "Import pointcloud PCD",
+    "name": "Import pointclouds PCD",
     "type": "app",
     "version": "2.0.0",
     "categories": [
@@ -14,7 +14,8 @@
     "icon_background": "#FFFFFF",
     "modal_template": "src/modal.html",
     "modal_template_state": {
-      "remove_source": true
+      "remove_source": true,
+      "project_name": ""
     },
     "icon": "",
     "icon_cover": true,

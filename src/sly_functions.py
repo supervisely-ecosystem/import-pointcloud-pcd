@@ -14,14 +14,14 @@ import src.sly_globals as g
 
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
+    if g.PROJECT_NAME is not None:
+        return g.PROJECT_NAME
     full_path_dir = os.path.dirname(input_path)
     return os.path.basename(full_path_dir)
 
 
 def get_items_in_dataset(names: list, paths: list) -> tuple:
-    """
-    Download dataset and convert pointclouds from .pcd to .pcd format.
-    """
+    """Get .pcd files."""
     res_batch_names = []
     res_batch_paths = []
     for name, path in zip(names, paths):
@@ -140,7 +140,7 @@ def upload_pointclouds(
     pcd_paths: list,
     pcd_hashes: list,
 ) -> list:
-    """Convert pcd to pcd and upload to project."""
+    """Get pcd files and upload to project."""
     pointclouds_infos = None
     for batch_names, batch_paths, batch_hashes in progress_bar(
         zip(
