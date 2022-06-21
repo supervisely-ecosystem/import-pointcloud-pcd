@@ -8,13 +8,13 @@ from supervisely.sly_logger import logger
 import supervisely
 from supervisely.io.fs import mkdir
 from supervisely.app.fastapi import create
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 app_root_directory = str(Path(__file__).parent.absolute().parents[0])
 logger.info(f"App root directory: {app_root_directory}")
 
-load_dotenv(os.path.join(app_root_directory, "debug.env"))
-load_dotenv(os.path.join(app_root_directory, "secret_debug.env"))
+# load_dotenv(os.path.join(app_root_directory, "debug.env"))
+# load_dotenv(os.path.join(app_root_directory, "secret_debug.env"))
 
 api = supervisely.Api.from_env()
 app = FastAPI()

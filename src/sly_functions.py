@@ -97,7 +97,7 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
         file_related_image_path, file_related_image_meta_path = get_related_image_and_meta_paths(
             full_path_file, file_name
         )
-        ds_name = get_dataset_name(remote_file_path.lstrip("/"))
+        ds_name = get_dataset_name(remote_file_path.lstrip("/"), g.DEFAULT_DATASET_NAME)
         if ds_name not in datasets_images_map.keys():
             datasets_images_map[ds_name] = {
                 "pcd_names": [],
