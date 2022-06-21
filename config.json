@@ -17,7 +17,7 @@
       "remove_source": true,
       "project_name": ""
     },
-    "icon": "https://github.com/supervisely-ecosystem/import-pointcloud-pcd/releases/download/v0.0.1/icon.png",
+    "icon": "https://user-images.githubusercontent.com/97401023/174845222-cd9096d7-db04-4e95-a9f5-1e5fef4fc9fa.png",
     "icon_cover": true,
 
     "headless": true,
@@ -26,5 +26,5 @@
     "context_menu": {
         "target": ["files_folder"]
     },
-    "poster": "https://github.com/supervisely-ecosystem/import-pointcloud-pcd/releases/download/v0.0.1/poster.png"
+    "poster": "https://user-images.githubusercontent.com/97401023/174845323-dbb77a33-c0a7-4162-a59e-da5092b488bd.png"
 }
