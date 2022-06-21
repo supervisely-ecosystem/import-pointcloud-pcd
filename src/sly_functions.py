@@ -14,7 +14,7 @@ import src.sly_globals as g
 
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
-    if g.PROJECT_NAME is not None:
+    if len(g.PROJECT_NAME) > 0:
         return g.PROJECT_NAME
     full_path_dir = os.path.dirname(input_path)
     return os.path.basename(full_path_dir)

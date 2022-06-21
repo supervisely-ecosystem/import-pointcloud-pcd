@@ -133,3 +133,4 @@ dmypy.json
 # app
 secret_debug.env
 .vscode
+debug
