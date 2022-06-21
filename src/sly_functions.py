@@ -18,27 +18,16 @@ def get_project_name_from_input_path(input_path: str) -> str:
     return os.path.basename(full_path_dir)
 
 
-def convert_ply_to_pcd(name: str, path: str) -> tuple:
-    """Convert .ply format to .pcd."""
-    points = o3d.io.read_point_cloud(path)
-    name = f"{get_file_name(name)}.pcd"
-    path = f"{os.path.dirname(path)}/{name}"
-    o3d.io.write_point_cloud(path, points, write_ascii=True)
-
-    return name, path
-
-
-def convert_items_in_dataset(names: list, paths: list) -> tuple:
+def get_items_in_dataset(names: list, paths: list) -> tuple:
     """
-    Download dataset and convert pointclouds from .pcd to .ply format.
+    Download dataset and convert pointclouds from .pcd to .pcd format.
     """
     res_batch_names = []
     res_batch_paths = []
     for name, path in zip(names, paths):
         try:
             file_ext = get_file_ext(path).lower()
-            if file_ext == ".ply":
-                name, path = convert_ply_to_pcd(name, path)
+            if file_ext == ".pcd":
                 res_batch_names.append(name)
                 res_batch_paths.append(path)
         except Exception as e:
@@ -49,7 +38,7 @@ def convert_items_in_dataset(names: list, paths: list) -> tuple:
 
 
 def download_project(api: sly.Api, input_path: str) -> str:
-    """Download target directory with ply files."""
+    """Download target directory with pcd files."""
     remote_proj_dir = input_path
     local_save_dir = f"{g.STORAGE_DIR}{remote_proj_dir}/"
     api.file.download_directory(
@@ -59,14 +48,14 @@ def download_project(api: sly.Api, input_path: str) -> str:
 
 
 def get_related_image_and_meta_paths(
-    local_path_to_ply_file: str, ply_file_name: str
+    local_path_to_pcd_file: str, pcd_file_name: str
 ) -> tuple:
     """Get related image and image meta paths from dataset directory if they exist."""
-    ds_root_dir = os.path.dirname(local_path_to_ply_file)
+    ds_root_dir = os.path.dirname(local_path_to_pcd_file)
     if not sly.fs.dir_exists(ds_root_dir):
         return None, None
     rel_images_dir_name = (
-        f"{get_file_name(ply_file_name)}{get_file_ext(ply_file_name).replace('.', '_')}"
+        f"{get_file_name(pcd_file_name)}{get_file_ext(pcd_file_name).replace('.', '_')}"
     )
     rel_images_dir = os.path.join(ds_root_dir, "related_images", rel_images_dir_name)
     rel_image_path = None
@@ -75,7 +64,7 @@ def get_related_image_and_meta_paths(
         return None, None
     files_in_dir = os.listdir(rel_images_dir)
     for file in files_in_dir:
-        if file.startswith(f"{get_file_name(ply_file_name)}."):
+        if file.startswith(f"{get_file_name(pcd_file_name)}."):
             file_ext = get_file_ext(file).lower()
             if file_ext in SUPPORTED_IMG_EXTS:
                 rel_image_path = os.path.join(rel_images_dir, file)
@@ -111,13 +100,13 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
         ds_name = get_dataset_name(remote_file_path.lstrip("/"))
         if ds_name not in datasets_images_map.keys():
             datasets_images_map[ds_name] = {
-                "ply_names": [],
-                "ply_paths": [],
-                "ply_hashes": [],
-                "ply_related_images": {"images_paths": [], "images_metas_paths": []},
+                "pcd_names": [],
+                "pcd_paths": [],
+                "pcd_hashes": [],
+                "pcd_related_images": {"images_paths": [], "images_metas_paths": []},
             }
 
-        if file_name in datasets_images_map[ds_name]["ply_names"]:
+        if file_name in datasets_images_map[ds_name]["pcd_names"]:
             temp_name = sly.fs.get_file_name(full_path_file)
             temp_ext = sly.fs.get_file_ext(full_path_file)
             new_file_name = f"{temp_name}_{sly.rand_str(5)}{temp_ext}"
@@ -128,13 +117,13 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
             )
             file_name = new_file_name
 
-        datasets_images_map[ds_name]["ply_names"].append(file_name)
-        datasets_images_map[ds_name]["ply_paths"].append(full_path_file)
-        datasets_images_map[ds_name]["ply_hashes"].append(file_hash)
-        datasets_images_map[ds_name]["ply_related_images"]["images_paths"].append(
+        datasets_images_map[ds_name]["pcd_names"].append(file_name)
+        datasets_images_map[ds_name]["pcd_paths"].append(full_path_file)
+        datasets_images_map[ds_name]["pcd_hashes"].append(file_hash)
+        datasets_images_map[ds_name]["pcd_related_images"]["images_paths"].append(
             file_related_image_path
         )
-        datasets_images_map[ds_name]["ply_related_images"]["images_metas_paths"].append(
+        datasets_images_map[ds_name]["pcd_related_images"]["images_metas_paths"].append(
             file_related_image_meta_path
         )
 
@@ -147,22 +136,22 @@ def upload_pointclouds(
     dataset_id: int,
     dataset_name: str,
     progress_bar: SlyTqdm,
-    ply_names: list,
-    ply_paths: list,
-    ply_hashes: list,
+    pcd_names: list,
+    pcd_paths: list,
+    pcd_hashes: list,
 ) -> list:
-    """Convert ply to pcd and upload to project."""
+    """Convert pcd to pcd and upload to project."""
     pointclouds_infos = None
     for batch_names, batch_paths, batch_hashes in progress_bar(
         zip(
-            sly.batched(seq=ply_names, batch_size=10),
-            sly.batched(seq=ply_paths, batch_size=10),
-            sly.batched(seq=ply_hashes, batch_size=10),
+            sly.batched(seq=pcd_names, batch_size=10),
+            sly.batched(seq=pcd_paths, batch_size=10),
+            sly.batched(seq=pcd_hashes, batch_size=10),
         ),
-        total=len(ply_paths) // 10,
+        total=len(pcd_paths) // 10,
         message="Dataset: {!r} pointclouds".format(dataset_name),
     ):
-        res_batch_names, res_batch_paths = convert_items_in_dataset(
+        res_batch_names, res_batch_paths = get_items_in_dataset(
             names=batch_names, paths=batch_paths
         )
         pointclouds_infos = api.pointcloud.upload_paths(
@@ -176,8 +165,8 @@ def upload_related_images(
     dataset_name: str,
     progress_bar: SlyTqdm,
     pointclouds_infos: list,
-    ply_rel_images_paths: list,
-    ply_rel_images_meta_paths: list,
+    pcd_rel_images_paths: list,
+    pcd_rel_images_meta_paths: list,
 ) -> None:
     """Upload related images to corresponding pointclouds in project."""
     pointclouds_ids = [pointcloud_info.id for pointcloud_info in pointclouds_infos]
@@ -189,12 +178,12 @@ def upload_related_images(
         batch_rel_images_meta_paths,
     ) in progress_bar(
         zip(
-            sly.batched(seq=ply_rel_images_paths, batch_size=10),
+            sly.batched(seq=pcd_rel_images_paths, batch_size=10),
             sly.batched(seq=pointclouds_ids, batch_size=10),
             sly.batched(seq=pointclouds_names, batch_size=10),
-            sly.batched(seq=ply_rel_images_meta_paths, batch_size=10),
+            sly.batched(seq=pcd_rel_images_meta_paths, batch_size=10),
         ),
-        total=len(ply_rel_images_paths) // 10,
+        total=len(pcd_rel_images_paths) // 10,
         message="Dataset: {!r} related images".format(dataset_name),
     ):
         images_infos = []

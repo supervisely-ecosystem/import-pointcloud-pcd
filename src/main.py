@@ -41,14 +41,14 @@ for dataset_name in datasets_names:
         project_id=project.id, name=dataset_name, change_name_if_conflict=True
     )
 
-    ply_names = datasets_images_map[dataset_name]["ply_names"]
-    ply_paths = datasets_images_map[dataset_name]["ply_paths"]
-    ply_hashes = datasets_images_map[dataset_name]["ply_hashes"]
-    ply_rel_images_paths = datasets_images_map[dataset_name]["ply_related_images"][
+    pcd_names = datasets_images_map[dataset_name]["pcd_names"]
+    pcd_paths = datasets_images_map[dataset_name]["pcd_paths"]
+    pcd_hashes = datasets_images_map[dataset_name]["pcd_hashes"]
+    pcd_rel_images_paths = datasets_images_map[dataset_name]["pcd_related_images"][
         "images_paths"
     ]
-    ply_rel_images_meta_paths = datasets_images_map[dataset_name][
-        "ply_related_images"
+    pcd_rel_images_meta_paths = datasets_images_map[dataset_name][
+        "pcd_related_images"
     ]["images_metas_paths"]
 
     try:
@@ -57,19 +57,19 @@ for dataset_name in datasets_names:
             dataset_id=dataset_info.id,
             dataset_name=dataset_info.name,
             progress_bar=progress_bar,
-            ply_names=ply_names,
-            ply_paths=ply_paths,
-            ply_hashes=ply_hashes,
+            pcd_names=pcd_names,
+            pcd_paths=pcd_paths,
+            pcd_hashes=pcd_hashes,
         )
 
-        if ply_rel_images_paths.count(None) != len(ply_rel_images_paths):
+        if pcd_rel_images_paths.count(None) != len(pcd_rel_images_paths):
             f.upload_related_images(
                 api=g.api,
                 dataset_name=dataset_info.name,
                 progress_bar=progress_bar,
                 pointclouds_infos=pointclouds_infos,
-                ply_rel_images_paths=ply_rel_images_paths,
-                ply_rel_images_meta_paths=ply_rel_images_meta_paths,
+                pcd_rel_images_paths=pcd_rel_images_paths,
+                pcd_rel_images_meta_paths=pcd_rel_images_meta_paths,
             )
     except:
         sly.logger.error(msg=f"Couldn't upload files from '{dataset_name}' dataset. Please check directory's file "

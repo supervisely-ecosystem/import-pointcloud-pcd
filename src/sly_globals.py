@@ -29,7 +29,7 @@ INPUT_PATH = os.environ.get("modal.state.slyFolder", None)
 REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.remove_source")))
 
 DEFAULT_DATASET_NAME = "ds0"
-ALLOWED_POINTCLOUD_EXTENSIONS = [".ply"]
+ALLOWED_POINTCLOUD_EXTENSIONS = [".pcd"]
 
 STORAGE_DIR = os.path.join(app_root_directory, "debug", "data", "storage_dir")
 mkdir(STORAGE_DIR, True)
