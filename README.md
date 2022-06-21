@@ -5,7 +5,6 @@
 
 <p align="center">
   <a href="#Overview">Overview</a> •
-  <a href="#How-To-Run">How To Run</a> •
   <a href="#Demo">Demo</a>
 </p>
 
@@ -82,20 +81,5 @@ and put there images and corresponding json files with projection matrix. See ex
 
 As a result we will get project `my_project` with 1 dataset `dataset_01`. Dataset will contain 2 pointcloud files, `kitti_0000000001.pcd` with related image, and `frame.pcd` without related image.
 
-# How to Run
-
-**Step 1.** Add [Import Pointclouds PCD](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/import-pointcloud-pcd) app to your team from Ecosystem
-
-<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-pointcloud-pcd" src="" width="500px" style='padding-bottom: 10px'/>
-
-**Step 2.** Run the application from the context menu of the directory with pointclouds on Team Files page
-
-<img src="" width="100%" style='padding-top: 10px'>  
-
-**Step 3.** Select options and press the Run button
-
-<img src="" width="80%" style='padding-top: 10px'>  
-
 ### Demo
-Example of uploading pointclouds:
-![]()
+Download [zip archive](https://github.com/supervisely-ecosystem/demo-poinctloud-episodes-annotated/releases/download/v0.0.4/demo_pointcloud.zip) with demo pointcloud project with related image (0.79 MB)
