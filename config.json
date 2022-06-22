@@ -7,7 +7,7 @@
       "pointclouds",
       "essentials"
     ],
-    "description": "Import pointclouds without annotations in .pcd format from Team Files",
+    "description": "Import pointclouds in PCD format without annotations",
     "docker_image": "supervisely/base-py-sdk:6.23.1",
     "entrypoint": "python -m uvicorn src.main:g.app --host 0.0.0.0 --port 8000",
     "port": 8000,
