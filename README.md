@@ -82,4 +82,4 @@ and put there images and corresponding json files with projection matrix. See ex
 As a result we will get project `my_project` with 1 dataset `dataset_01`. Dataset will contain 2 pointcloud files, `kitti_0000000001.pcd` with related image, and `frame.pcd` without related image.
 
 ### Demo Data
-Download [zip archive](https://github.com/supervisely-ecosystem/demo-poinctloud-episodes-annotated/releases/download/v0.0.4/demo_pointcloud.zip) with demo pointcloud project with related image (0.79 MB)
+Download [zip archive](https://github.com/supervisely-ecosystem/import-pointcloud-pcd/releases/download/v0.0.4/demo_pointcloud.zip) with demo pointcloud project with related image (0.79 MB)
