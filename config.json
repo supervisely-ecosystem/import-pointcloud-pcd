@@ -1,31 +1,31 @@
 {
-    "name": "Import Pointclouds PCD",
-    "type": "app",
-    "version": "2.0.0",
-    "categories": [
-      "import",
-      "pointclouds",
-      "essentials"
-    ],
-    "description": "Import pointclouds in PCD format without annotations",
-    "docker_image": "supervisely/base-py-sdk:6.23.1",
-    "entrypoint": "python -m uvicorn src.main:g.app --host 0.0.0.0 --port 8000",
-    "port": 8000,
-    "task_location": "workspace_tasks",
-    "icon_background": "#FFFFFF",
-    "modal_template": "src/modal.html",
-    "modal_template_state": {
-      "remove_source": true,
-      "project_name": ""
-    },
-    "icon": "https://user-images.githubusercontent.com/97401023/174861159-19c31267-a5a7-4757-9a88-fb60ed77eeef.png",
-    "icon_cover": true,
-
-    "headless": true,
-    "instance_version": "6.4.58",
-
-    "context_menu": {
-        "target": ["files_folder"]
-    },
-    "poster": "https://user-images.githubusercontent.com/97401023/174845323-dbb77a33-c0a7-4162-a59e-da5092b488bd.png"
+  "name": "Import Pointclouds PCD",
+  "type": "app",
+  "version": "2.0.0",
+  "categories": [
+    "import",
+    "pointclouds",
+    "essentials"
+  ],
+  "description": "Import pointclouds in PCD format without annotations",
+  "docker_image": "supervisely/base-py-sdk:6.35.0",
+  "entrypoint": "python -m uvicorn src.main:g.app --host 0.0.0.0 --port 8000",
+  "port": 8000,
+  "task_location": "workspace_tasks",
+  "icon_background": "#FFFFFF",
+  "modal_template": "src/modal.html",
+  "modal_template_state": {
+    "remove_source": true,
+    "project_name": ""
+  },
+  "icon": "https://user-images.githubusercontent.com/97401023/174861159-19c31267-a5a7-4757-9a88-fb60ed77eeef.png",
+  "icon_cover": true,
+  "headless": true,
+  "instance_version": "6.4.58",
+  "context_menu": {
+    "target": [
+      "files_folder"
+    ]
+  },
+  "poster": "https://user-images.githubusercontent.com/97401023/174845323-dbb77a33-c0a7-4162-a59e-da5092b488bd.png"
 }
