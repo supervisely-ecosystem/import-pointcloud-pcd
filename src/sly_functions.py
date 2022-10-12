@@ -10,7 +10,7 @@ from supervisely.io.fs import get_file_ext, get_file_name, get_file_name_with_ex
 from supervisely.io.json import load_json_file
 
 import src.sly_globals as g
-import download_progress
+import src.download_progress
 
 
 def get_project_name_from_input_path(input_path: str) -> str:
