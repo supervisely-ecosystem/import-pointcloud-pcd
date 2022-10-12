@@ -39,10 +39,13 @@ def get_items_in_dataset(names: list, paths: list) -> tuple:
 
 def download_project(api: sly.Api, input_path: str) -> str:
     """Download target directory with pcd files."""
-    remote_proj_dir = input_path
-    local_save_dir = f"{g.STORAGE_DIR}{remote_proj_dir}/"
+    if g.IS_ON_AGENT:
+        agent_id, cur_files_path = api.file.parse_agent_id_and_path(input_path)
+        local_save_dir = f"{g.STORAGE_DIR}{cur_files_path}/"
+    else:
+        local_save_dir = f"{g.STORAGE_DIR}{input_path}/"
     api.file.download_directory(
-        g.TEAM_ID, remote_path=remote_proj_dir, local_save_path=local_save_dir
+        g.TEAM_ID, remote_path=input_path, local_save_path=local_save_dir
     )
     return local_save_dir
 

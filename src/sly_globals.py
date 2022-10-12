@@ -8,11 +8,12 @@ from supervisely.sly_logger import logger
 import supervisely
 from supervisely.io.fs import mkdir
 from supervisely.app.fastapi import create
-# from dotenv import load_dotenv
 
 app_root_directory = str(Path(__file__).parent.absolute().parents[0])
 logger.info(f"App root directory: {app_root_directory}")
 
+# debug
+# from dotenv import load_dotenv
 # load_dotenv(os.path.join(app_root_directory, "debug.env"))
 # load_dotenv(os.path.join(app_root_directory, "secret_debug.env"))
 
@@ -28,6 +29,9 @@ WORKSPACE_ID = int(os.environ["context.workspaceId"])
 INPUT_PATH = os.environ.get("modal.state.slyFolder", None)
 REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.remove_source")))
 PROJECT_NAME = os.environ.get("modal.state.project_name")
+
+if INPUT_PATH:
+    IS_ON_AGENT = api.file.is_on_agent(INPUT_PATH)
 
 DEFAULT_DATASET_NAME = "ds0"
 ALLOWED_POINTCLOUD_EXTENSIONS = [".pcd"]
