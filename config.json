@@ -8,7 +8,7 @@
     "essentials"
   ],
   "description": "Import pointclouds in PCD format without annotations",
-  "docker_image": "supervisely/base-py-sdk:6.35.0",
+  "docker_image": "supervisely/base-py-sdk:6.68.0",
   "entrypoint": "python -m uvicorn src.main:g.app --host 0.0.0.0 --port 8000",
   "port": 8000,
   "task_location": "workspace_tasks",
@@ -21,10 +21,13 @@
   "icon": "https://user-images.githubusercontent.com/97401023/174861159-19c31267-a5a7-4757-9a88-fb60ed77eeef.png",
   "icon_cover": true,
   "headless": true,
-  "instance_version": "6.4.58",
+  "min_agent_version": "6.7.3",
+  "min_instance_version": "6.5.46",
   "context_menu": {
+    "context_category": "Import",
     "target": [
-      "files_folder"
+      "files_folder",
+      "agent_folder"
     ]
   },
   "poster": "https://user-images.githubusercontent.com/97401023/174845323-dbb77a33-c0a7-4162-a59e-da5092b488bd.png"
