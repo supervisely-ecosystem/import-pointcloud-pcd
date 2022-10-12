@@ -13,9 +13,9 @@ app_root_directory = str(Path(__file__).parent.absolute().parents[0])
 logger.info(f"App root directory: {app_root_directory}")
 
 # debug
-# from dotenv import load_dotenv
-# load_dotenv(os.path.join(app_root_directory, "debug.env"))
-# load_dotenv(os.path.join(app_root_directory, "secret_debug.env"))
+from dotenv import load_dotenv
+load_dotenv(os.path.join(app_root_directory, "debug.env"))
+load_dotenv(os.path.join(app_root_directory, "secret_debug.env"))
 
 api = supervisely.Api.from_env()
 app = FastAPI()
@@ -37,4 +37,4 @@ DEFAULT_DATASET_NAME = "ds0"
 ALLOWED_POINTCLOUD_EXTENSIONS = [".pcd"]
 
 STORAGE_DIR = os.path.join(app_root_directory, "debug", "data", "storage_dir")
-mkdir(STORAGE_DIR, True)
+mkdir(STORAGE_DIR, False)

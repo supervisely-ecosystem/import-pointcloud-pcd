@@ -1,10 +1,8 @@
 import supervisely as sly
 from supervisely import logger
 
-import src.sly_functions as f
-import src.sly_globals as g
 from supervisely.app.widgets import SlyTqdm
-
+import src.sly_globals as g
 import src.sly_functions as f
 
 progress_bar = SlyTqdm()
@@ -76,7 +74,6 @@ for dataset_name in datasets_names:
                                 f"structure, for subdirectories and duplicated file names")
         continue
 
-sly.fs.remove_dir(dir_=g.STORAGE_DIR)
 if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
     g.api.file.remove(team_id=g.TEAM_ID, path=g.INPUT_PATH)
     source_dir_name = g.INPUT_PATH.lstrip("/").rstrip("/")

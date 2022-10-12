@@ -1,15 +1,16 @@
-import supervisely as sly
 import os
-
 import open3d as o3d
+from pathlib import Path
+import supervisely as sly
+
 from supervisely.api.module_api import ApiField
 from supervisely.app.widgets import SlyTqdm
 from supervisely.imaging.image import SUPPORTED_IMG_EXTS
 from supervisely.io.fs import get_file_ext, get_file_name, get_file_name_with_ext
 from supervisely.io.json import load_json_file
-from supervisely.video.import_utils import get_dataset_name
 
 import src.sly_globals as g
+import download_progress
 
 
 def get_project_name_from_input_path(input_path: str) -> str:
@@ -41,13 +42,16 @@ def download_project(api: sly.Api, input_path: str) -> str:
     """Download target directory with pcd files."""
     if g.IS_ON_AGENT:
         agent_id, cur_files_path = api.file.parse_agent_id_and_path(input_path)
-        local_save_dir = f"{g.STORAGE_DIR}{cur_files_path}/"
     else:
-        local_save_dir = f"{g.STORAGE_DIR}{input_path}/"
-    api.file.download_directory(
-        g.TEAM_ID, remote_path=input_path, local_save_path=local_save_dir
-    )
-    return local_save_dir
+        cur_files_path = input_path
+
+    sizeb = api.file.get_directory_size(g.TEAM_ID, input_path)
+    extract_dir = os.path.join(g.STORAGE_DIR, cur_files_path.strip("/"))
+    progress_cb = download_progress.get_progress_cb(api, g.TASK_ID, f"Downloading {input_path.strip('/')}", sizeb,
+                                                    is_size=True)
+    api.file.download_directory(g.TEAM_ID, input_path, extract_dir, progress_cb)
+    return extract_dir
+
 
 
 def get_related_image_and_meta_paths(
@@ -86,6 +90,8 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
     datasets_images_map = {}
     for file_info in dir_info:
         remote_file_path = file_info["path"]
+        if g.IS_ON_AGENT:
+            agent_id, remote_file_path = g.api.file.parse_agent_id_and_path(remote_file_path)
         full_path_file = f"{storage_dir}{remote_file_path}"
         file_ext = get_file_ext(full_path_file)
         if file_ext not in g.ALLOWED_POINTCLOUD_EXTENSIONS:
@@ -218,3 +224,14 @@ def shutdown_app():
         sly.app.fastapi.shutdown()
     except KeyboardInterrupt:
         sly.logger.info("Application shutdown successfully")
+
+
+def get_dataset_name(file_path, default="ds0"):
+    dir_path = os.path.split(file_path)[0]
+    ds_name = default
+    path_parts = Path(dir_path).parts
+    if len(path_parts) != 1:
+        if g.IS_ON_AGENT:
+            return path_parts[-1]
+        ds_name = path_parts[1]
+    return ds_name
