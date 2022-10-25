@@ -207,12 +207,14 @@ def upload_related_images(
         ):
             if rimg_path is not None or meta_path is not None:
                 img_hash = api.pointcloud.upload_related_image(rimg_path)
+                if isinstance(img_hash, list):
+                    img_hash = img_hash[0]
                 img_meta = load_json_file(meta_path)
 
                 image_info = {
                     ApiField.ENTITY_ID: pcd_id,
                     ApiField.NAME: pcd_name,
-                    ApiField.HASH: img_hash[0],
+                    ApiField.HASH: img_hash,
                     ApiField.META: img_meta,
                 }
                 images_infos.append(image_info)
