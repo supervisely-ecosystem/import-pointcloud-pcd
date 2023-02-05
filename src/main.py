@@ -26,6 +26,8 @@ class MyImport(sly.app.Import):
             raise Exception(f"There are no files in selected directory: '{context.path}'")
 
         project_name = f.get_project_name_from_input_path(context.path)
+        logger.info(f"77777777777777777777777777777777777777                  {g.PROJECT_NAME}")
+        logger.info(f"77777777777777777777777777777777777777                  {project_name}")
 
         datasets_names, datasets_images_map = f.get_datasets_items_map(
             dir_info, context.path, project_name
