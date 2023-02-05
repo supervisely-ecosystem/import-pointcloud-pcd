@@ -211,3 +211,10 @@ def get_dataset_name(file_path, default="ds0"):
         return path_parts[-1]
     ds_name = path_parts[0]
     return ds_name
+
+
+def shutdown_app():
+    try:
+        sly.app.fastapi.shutdown()
+    except KeyboardInterrupt:
+        sly.logger.info("Application shutdown successfully")
