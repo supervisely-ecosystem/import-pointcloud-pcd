@@ -13,10 +13,11 @@ import src.sly_globals as g
 
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
+    project_folder = os.path.basename(input_path)
     if len(g.PROJECT_NAME) > 0:
-        return g.PROJECT_NAME
-    full_path_dir = os.path.basename(input_path)
-    return os.path.basename(full_path_dir)
+        return g.PROJECT_NAME, project_folder
+    project_name = project_folder
+    return project_name, project_folder
 
 
 def get_items_in_dataset(names: list, paths: list) -> tuple:
@@ -63,11 +64,11 @@ def get_related_image_and_meta_paths(local_path_to_pcd_file: str, pcd_file_name:
     return rel_image_path, rel_image_meta_path
 
 
-def get_datasets_items_map(dir_info: list, storage_dir, project_name) -> tuple:
+def get_datasets_items_map(dir_info: list, storage_dir, project_folder) -> tuple:
     """Creates a dictionary map based on api response from the target sly folder data."""
     datasets_images_map = {}
     for file_info in dir_info:
-        remote_file_path = file_info["path"].split(project_name)[-1]
+        remote_file_path = file_info["path"].split(project_folder)[-1]
         if g.IS_ON_AGENT:
             agent_id, remote_file_path = g.api.file.parse_agent_id_and_path(remote_file_path)
         full_path_file = f"{storage_dir}{remote_file_path}"

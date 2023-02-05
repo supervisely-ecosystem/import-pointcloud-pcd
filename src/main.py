@@ -25,12 +25,10 @@ class MyImport(sly.app.Import):
         if len(dir_info) == 0:
             raise Exception(f"There are no files in selected directory: '{context.path}'")
 
-        project_name = f.get_project_name_from_input_path(context.path)
-        logger.info(f"77777777777777777777777777777777777777                  {g.PROJECT_NAME}")
-        logger.info(f"77777777777777777777777777777777777777                  {project_name}")
+        project_name, project_folder = f.get_project_name_from_input_path(context.path)
 
         datasets_names, datasets_images_map = f.get_datasets_items_map(
-            dir_info, context.path, project_name
+            dir_info, context.path, project_folder
         )
         project = g.api.project.create(
             workspace_id=context.workspace_id,
@@ -81,7 +79,7 @@ class MyImport(sly.app.Import):
                 continue
 
         if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
-            g.api.file.remove(team_id=context.team_id, path=context.path)
+            g.api.file.remove(team_id=context.team_id, path=g.INPUT_PATH)
             source_dir_name = context.path.lstrip("/").rstrip("/")
             sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
