@@ -1,7 +1,9 @@
 import os
 from distutils.util import strtobool
 import supervisely as sly
+from fastapi import FastAPI
 from supervisely.io.fs import mkdir
+from supervisely.app.fastapi import create
 
 from dotenv import load_dotenv
 
@@ -9,6 +11,10 @@ load_dotenv("local.env")
 load_dotenv(os.path.expanduser("~/supervisely.env"))
 
 api = sly.Api.from_env()
+app = FastAPI()
+sly_app = create()
+
+app.mount("/sly", sly_app)
 
 INPUT_PATH = os.environ.get("modal.state.slyFolder", None)
 REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.remove_source")))
