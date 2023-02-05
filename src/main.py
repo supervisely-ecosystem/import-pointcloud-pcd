@@ -83,8 +83,7 @@ class MyImport(sly.app.Import):
             source_dir_name = context.path.lstrip("/").rstrip("/")
             sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
-        f.shutdown_app()
-
 
 app = MyImport()
 app.run()
+f.shutdown_app()
