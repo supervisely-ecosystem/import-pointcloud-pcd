@@ -1,5 +1,4 @@
 import os
-import open3d as o3d
 from pathlib import Path
 import supervisely as sly
 
@@ -10,14 +9,13 @@ from supervisely.io.fs import get_file_ext, get_file_name, get_file_name_with_ex
 from supervisely.io.json import load_json_file
 
 import src.sly_globals as g
-import src.download_progress as download_progress
 
 
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
     if len(g.PROJECT_NAME) > 0:
         return g.PROJECT_NAME
-    full_path_dir = os.path.dirname(input_path)
+    full_path_dir = os.path.basename(input_path)
     return os.path.basename(full_path_dir)
 
 
@@ -38,25 +36,7 @@ def get_items_in_dataset(names: list, paths: list) -> tuple:
     return res_batch_names, res_batch_paths
 
 
-def download_project(api: sly.Api, input_path: str) -> str:
-    """Download target directory with pcd files."""
-    if g.IS_ON_AGENT:
-        agent_id, cur_files_path = api.file.parse_agent_id_and_path(input_path)
-    else:
-        cur_files_path = input_path
-
-    sizeb = api.file.get_directory_size(g.TEAM_ID, input_path)
-    extract_dir = os.path.join(g.STORAGE_DIR, cur_files_path.strip("/"))
-    progress_cb = download_progress.get_progress_cb(api, g.TASK_ID, f"Downloading {input_path.strip('/')}", sizeb,
-                                                    is_size=True)
-    api.file.download_directory(g.TEAM_ID, input_path, extract_dir, progress_cb)
-    return extract_dir
-
-
-
-def get_related_image_and_meta_paths(
-    local_path_to_pcd_file: str, pcd_file_name: str
-) -> tuple:
+def get_related_image_and_meta_paths(local_path_to_pcd_file: str, pcd_file_name: str) -> tuple:
     """Get related image and image meta paths from dataset directory if they exist."""
     ds_root_dir = os.path.dirname(local_path_to_pcd_file)
     if not sly.fs.dir_exists(ds_root_dir):
@@ -76,20 +56,18 @@ def get_related_image_and_meta_paths(
             if file_ext in SUPPORTED_IMG_EXTS:
                 rel_image_path = os.path.join(rel_images_dir, file)
                 rel_image_meta_path = os.path.join(rel_images_dir, f"{file}.json")
-                if sly.fs.file_exists(rel_image_path) and sly.fs.file_exists(
-                    rel_image_meta_path
-                ):
+                if sly.fs.file_exists(rel_image_path) and sly.fs.file_exists(rel_image_meta_path):
                     break
                 else:
                     return None, None
     return rel_image_path, rel_image_meta_path
 
 
-def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
+def get_datasets_items_map(dir_info: list, storage_dir, project_name) -> tuple:
     """Creates a dictionary map based on api response from the target sly folder data."""
     datasets_images_map = {}
     for file_info in dir_info:
-        remote_file_path = file_info["path"]
+        remote_file_path = file_info["path"].split(project_name)[-1]
         if g.IS_ON_AGENT:
             agent_id, remote_file_path = g.api.file.parse_agent_id_and_path(remote_file_path)
         full_path_file = f"{storage_dir}{remote_file_path}"
@@ -221,19 +199,14 @@ def upload_related_images(
 
         api.pointcloud.add_related_images(images_infos)
 
-def shutdown_app():
-    try:
-        sly.app.fastapi.shutdown()
-    except KeyboardInterrupt:
-        sly.logger.info("Application shutdown successfully")
-
 
 def get_dataset_name(file_path, default="ds0"):
     dir_path = os.path.split(file_path)[0]
     ds_name = default
     path_parts = Path(dir_path).parts
-    if len(path_parts) != 1:
-        if g.IS_ON_AGENT:
-            return path_parts[-1]
-        ds_name = path_parts[1]
+    if len(path_parts) == 0:
+        return ds_name
+    if g.IS_ON_AGENT:
+        return path_parts[-1]
+    ds_name = path_parts[0]
     return ds_name

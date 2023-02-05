@@ -134,3 +134,5 @@ dmypy.json
 secret_debug.env
 .vscode
 debug
+src/debug
+__pycache__
