@@ -22,11 +22,11 @@ dir_info = g.api.file.list(g.TEAM_ID, g.INPUT_PATH)
 if len(dir_info) == 0:
     raise Exception(f"There are no files in selected directory: '{g.INPUT_PATH}'")
 
-project_name = f.get_project_name_from_input_path(g.INPUT_PATH)
+project_name, project_folder = f.get_project_name_from_input_path(g.INPUT_PATH)
 f.download_project(g.api, g.INPUT_PATH)
 
 datasets_names, datasets_images_map = f.get_datasets_items_map(
-    dir_info, g.STORAGE_DIR
+    dir_info, g.STORAGE_DIR, project_folder
 )
 project = g.api.project.create(
     workspace_id=g.WORKSPACE_ID,
@@ -42,12 +42,10 @@ for dataset_name in datasets_names:
     pcd_names = datasets_images_map[dataset_name]["pcd_names"]
     pcd_paths = datasets_images_map[dataset_name]["pcd_paths"]
     pcd_hashes = datasets_images_map[dataset_name]["pcd_hashes"]
-    pcd_rel_images_paths = datasets_images_map[dataset_name]["pcd_related_images"][
-        "images_paths"
+    pcd_rel_images_paths = datasets_images_map[dataset_name]["pcd_related_images"]["images_paths"]
+    pcd_rel_images_meta_paths = datasets_images_map[dataset_name]["pcd_related_images"][
+        "images_metas_paths"
     ]
-    pcd_rel_images_meta_paths = datasets_images_map[dataset_name][
-        "pcd_related_images"
-    ]["images_metas_paths"]
 
     try:
         pointclouds_infos = f.upload_pointclouds(
@@ -70,19 +68,17 @@ for dataset_name in datasets_names:
                 pcd_rel_images_meta_paths=pcd_rel_images_meta_paths,
             )
     except:
-        sly.logger.error(msg=f"Couldn't upload files from '{dataset_name}' dataset. Please check directory's file "
-                                f"structure, for subdirectories and duplicated file names")
+        sly.logger.error(
+            msg=f"Couldn't upload files from '{dataset_name}' dataset. Please check directory's file "
+            f"structure, for subdirectories and duplicated file names"
+        )
         continue
 
 if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
     g.api.file.remove(team_id=g.TEAM_ID, path=g.INPUT_PATH)
     source_dir_name = g.INPUT_PATH.lstrip("/").rstrip("/")
-    sly.logger.info(
-        msg=f"Source directory: '{source_dir_name}' was successfully removed."
-    )
+    sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
-g.api.task.set_output_project(
-    task_id=g.TASK_ID, project_id=project.id, project_name=project.name
-)
+g.api.task.set_output_project(task_id=g.TASK_ID, project_id=project.id, project_name=project.name)
 
 f.shutdown_app()
