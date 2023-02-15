@@ -91,6 +91,9 @@ def get_datasets_items_map(dir_info: list, storage_dir, project_folder) -> tuple
         if g.IS_ON_AGENT:
             agent_id, remote_file_path = g.api.file.parse_agent_id_and_path(remote_file_path)
         full_path_file = f"{storage_dir}{remote_file_path}"
+        sly.logger.info(
+            f"99999999999999999999999999    {full_path_file}      555555555555555  {os.path.isfile(full_path_file)}"
+        )
         file_ext = get_file_ext(full_path_file)
         if file_ext not in g.ALLOWED_POINTCLOUD_EXTENSIONS:
             if file_ext not in SUPPORTED_IMG_EXTS and file_ext != ".json":

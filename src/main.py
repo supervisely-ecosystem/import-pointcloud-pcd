@@ -31,6 +31,7 @@ datasets_names, datasets_images_map = f.get_datasets_items_map(
 sly.logger.info(
     f"777777777777777777777777777777     {project_folder}       -------------        {datasets_names}"
 )
+sly.logger.info(f"33333333333333333333333  -------------        {datasets_images_map}")
 project = g.api.project.create(
     workspace_id=g.WORKSPACE_ID,
     name=project_name,
