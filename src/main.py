@@ -22,9 +22,7 @@ class MyImport(sly.app.Import):
         )
 
         dir_info = g.api.file.list(context.team_id, g.INPUT_PATH)
-        sly.logger.info(
-            f"77777777777777777           {g.INPUT_PATH}  7777777777777    {context.path}"
-        )
+
         if len(dir_info) == 0:
             raise Exception(f"There are no files in selected directory: '{context.path}'")
 
