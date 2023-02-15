@@ -81,7 +81,7 @@ my_project
             └── 0000000000.png.json
 ```
 
-if you want to attach photo context to ply file just create a directory `related_images` near the file. 
+if you want to attach photo context to pcd file just create a directory `related_images` near the file. 
 Then create directory <filename_with_ext> (in this example we name directory kitti_0000000001_pcd - it's a filename + extension + all symbols . are replaced to _) 
 and put there images and corresponding json files with projection matrix. See example for more info.
 
