@@ -87,7 +87,7 @@ def get_datasets_items_map(dir_info: list, storage_dir, project_folder) -> tuple
     datasets_images_map = {}
     for file_info in dir_info:
         remote_file_path = file_info["path"].split(project_folder)[-1]
-        # remote_file_path = file_info["path"]
+        sly.logger.info(f"77777777777 remote_file_path   77777777777777777    {remote_file_path}")
         if g.IS_ON_AGENT:
             agent_id, remote_file_path = g.api.file.parse_agent_id_and_path(remote_file_path)
         full_path_file = f"{storage_dir}{remote_file_path}"
@@ -220,19 +220,20 @@ def upload_related_images(
         api.pointcloud.add_related_images(images_infos)
 
 
+def get_dataset_name(file_path, default="ds0"):
+    dir_path = os.path.split(file_path)[0]
+    ds_name = default
+    path_parts = Path(dir_path).parts
+    if len(path_parts) == 0:
+        return ds_name
+    if g.IS_ON_AGENT:
+        return path_parts[-1]
+    ds_name = path_parts[0]
+    return ds_name
+
+
 def shutdown_app():
     try:
         sly.app.fastapi.shutdown()
     except KeyboardInterrupt:
         sly.logger.info("Application shutdown successfully")
-
-
-def get_dataset_name(file_path, default="ds0"):
-    dir_path = os.path.split(file_path)[0]
-    ds_name = default
-    path_parts = Path(dir_path).parts
-    if len(path_parts) != 1:
-        if g.IS_ON_AGENT:
-            return path_parts[-1]
-        ds_name = path_parts[1]
-    return ds_name

@@ -28,7 +28,9 @@ f.download_project(g.api, g.INPUT_PATH)
 datasets_names, datasets_images_map = f.get_datasets_items_map(
     dir_info, g.STORAGE_DIR, project_folder
 )
-sly.logger.info(f"777777777777777777777777777777                    {datasets_names}")
+sly.logger.info(
+    f"777777777777777777777777777777     {project_folder}       -------------        {datasets_names}"
+)
 project = g.api.project.create(
     workspace_id=g.WORKSPACE_ID,
     name=project_name,
