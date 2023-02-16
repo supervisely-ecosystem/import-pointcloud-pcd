@@ -1,27 +1,19 @@
 import os
-from pathlib import Path
 from distutils.util import strtobool
 
-from fastapi import FastAPI
 from supervisely.sly_logger import logger
 
-import supervisely
+import supervisely as sly
 from supervisely.io.fs import mkdir
-from supervisely.app.fastapi import create
-
-app_root_directory = str(Path(__file__).parent.absolute().parents[0])
-logger.info(f"App root directory: {app_root_directory}")
 
 # debug
 from dotenv import load_dotenv
-load_dotenv(os.path.join(app_root_directory, "debug.env"))
-load_dotenv(os.path.join(app_root_directory, "secret_debug.env"))
 
-api = supervisely.Api.from_env()
-app = FastAPI()
-sly_app = create()
+if sly.is_development():
+    load_dotenv("local.env")
+    load_dotenv(os.path.expanduser("~/supervisely.env"))
 
-app.mount("/sly", sly_app)
+api: sly.Api = sly.Api.from_env()
 
 TASK_ID = int(os.environ["TASK_ID"])
 TEAM_ID = int(os.environ["context.teamId"])
@@ -36,5 +28,5 @@ if INPUT_PATH:
 DEFAULT_DATASET_NAME = "ds0"
 ALLOWED_POINTCLOUD_EXTENSIONS = [".pcd"]
 
-STORAGE_DIR = os.path.join(app_root_directory, "debug", "data", "storage_dir")
-mkdir(STORAGE_DIR, False)
+STORAGE_DIR = os.path.join(sly.app.get_data_dir(), "storage_dir")
+mkdir(STORAGE_DIR, True)

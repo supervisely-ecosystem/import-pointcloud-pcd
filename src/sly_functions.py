@@ -47,16 +47,14 @@ def download_project(api: sly.Api, input_path: str) -> str:
 
     sizeb = api.file.get_directory_size(g.TEAM_ID, input_path)
     extract_dir = os.path.join(g.STORAGE_DIR, cur_files_path.strip("/"))
-    progress_cb = download_progress.get_progress_cb(api, g.TASK_ID, f"Downloading {input_path.strip('/')}", sizeb,
-                                                    is_size=True)
+    progress_cb = download_progress.get_progress_cb(
+        api, g.TASK_ID, f"Downloading {input_path.strip('/')}", sizeb, is_size=True
+    )
     api.file.download_directory(g.TEAM_ID, input_path, extract_dir, progress_cb)
     return extract_dir
 
 
-
-def get_related_image_and_meta_paths(
-    local_path_to_pcd_file: str, pcd_file_name: str
-) -> tuple:
+def get_related_image_and_meta_paths(local_path_to_pcd_file: str, pcd_file_name: str) -> tuple:
     """Get related image and image meta paths from dataset directory if they exist."""
     ds_root_dir = os.path.dirname(local_path_to_pcd_file)
     if not sly.fs.dir_exists(ds_root_dir):
@@ -76,9 +74,7 @@ def get_related_image_and_meta_paths(
             if file_ext in SUPPORTED_IMG_EXTS:
                 rel_image_path = os.path.join(rel_images_dir, file)
                 rel_image_meta_path = os.path.join(rel_images_dir, f"{file}.json")
-                if sly.fs.file_exists(rel_image_path) and sly.fs.file_exists(
-                    rel_image_meta_path
-                ):
+                if sly.fs.file_exists(rel_image_path) and sly.fs.file_exists(rel_image_meta_path):
                     break
                 else:
                     return None, None
@@ -150,7 +146,7 @@ def upload_pointclouds(
     pcd_hashes: list,
 ) -> list:
     """Get pcd files and upload to project."""
-    pointclouds_infos = None
+    all_pointclouds_infos = []
     batch_size = 10 if len(pcd_names) >= 10 else len(pcd_names)
     for batch_names, batch_paths, batch_hashes in progress_bar(
         zip(
@@ -167,7 +163,8 @@ def upload_pointclouds(
         pointclouds_infos = api.pointcloud.upload_paths(
             dataset_id=dataset_id, names=res_batch_names, paths=res_batch_paths
         )
-    return pointclouds_infos
+        all_pointclouds_infos.extend(pointclouds_infos)
+    return all_pointclouds_infos
 
 
 def upload_related_images(
@@ -220,6 +217,7 @@ def upload_related_images(
                 images_infos.append(image_info)
 
         api.pointcloud.add_related_images(images_infos)
+
 
 def shutdown_app():
     try:
