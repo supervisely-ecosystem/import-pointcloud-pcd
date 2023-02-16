@@ -72,9 +72,8 @@ for dataset_name in datasets_names:
         continue
 
 if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
-    path_to_remove = g.INPUT_DIR if g.INPUT_DIR is not None else g.INPUT_FILE
-    g.api.file.remove(team_id=g.TEAM_ID, path=path_to_remove)
-    source_dir_name = path_to_remove.strip("/")
+    g.api.file.remove(team_id=g.TEAM_ID, path=g.INPUT_PATH)
+    source_dir_name = g.INPUT_PATH.lstrip("/").rstrip("/")
     sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
 g.api.task.set_output_project(task_id=g.TASK_ID, project_id=project.id, project_name=project.name)
