@@ -6,8 +6,7 @@ import supervisely as sly
 from supervisely.api.module_api import ApiField
 from supervisely.app.widgets import SlyTqdm
 from supervisely.imaging.image import SUPPORTED_IMG_EXTS
-from supervisely.io.fs import (get_file_ext, get_file_name,
-                               get_file_name_with_ext)
+from supervisely.io.fs import get_file_ext, get_file_name, get_file_name_with_ext
 from supervisely.io.json import load_json_file
 
 import src.download_progress as download_progress
@@ -18,8 +17,8 @@ def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
     if len(g.PROJECT_NAME) > 0:
         return g.PROJECT_NAME
-    full_path_dir = os.path.dirname(input_path)
-    return os.path.basename(full_path_dir)
+    # full_path_dir = os.path.dirname(input_path)
+    return os.path.basename(input_path)
 
 
 def get_items_in_dataset(names: list, paths: list) -> tuple:
