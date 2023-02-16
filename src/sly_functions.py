@@ -143,16 +143,14 @@ def upload_pointclouds(
     progress_bar: SlyTqdm,
     pcd_names: list,
     pcd_paths: list,
-    pcd_hashes: list,
 ) -> list:
     """Get pcd files and upload to project."""
     all_pointclouds_infos = []
     batch_size = 10 if len(pcd_names) >= 10 else len(pcd_names)
-    for batch_names, batch_paths, batch_hashes in progress_bar(
+    for batch_names, batch_paths in progress_bar(
         zip(
             sly.batched(seq=pcd_names, batch_size=batch_size),
             sly.batched(seq=pcd_paths, batch_size=batch_size),
-            sly.batched(seq=pcd_hashes, batch_size=batch_size),
         ),
         total=len(pcd_paths) // batch_size,
         message="Dataset: {!r} pointclouds".format(dataset_name),

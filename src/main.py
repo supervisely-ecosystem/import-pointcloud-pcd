@@ -2,8 +2,8 @@ import supervisely as sly
 from supervisely import logger
 
 from supervisely.app.widgets import SlyTqdm
-import src.sly_globals as g
-import src.sly_functions as f
+import sly_globals as g
+import sly_functions as f
 
 progress_bar = SlyTqdm()
 
@@ -40,7 +40,6 @@ for dataset_name in datasets_names:
 
     pcd_names = datasets_images_map[dataset_name]["pcd_names"]
     pcd_paths = datasets_images_map[dataset_name]["pcd_paths"]
-    pcd_hashes = datasets_images_map[dataset_name]["pcd_hashes"]
     pcd_rel_images_paths = datasets_images_map[dataset_name]["pcd_related_images"]["images_paths"]
     pcd_rel_images_meta_paths = datasets_images_map[dataset_name]["pcd_related_images"][
         "images_metas_paths"
@@ -54,7 +53,6 @@ for dataset_name in datasets_names:
             progress_bar=progress_bar,
             pcd_names=pcd_names,
             pcd_paths=pcd_paths,
-            pcd_hashes=pcd_hashes,
         )
 
         if pcd_rel_images_paths.count(None) != len(pcd_rel_images_paths):
