@@ -1,9 +1,9 @@
 import supervisely as sly
 from supervisely import logger
-
 from supervisely.app.widgets import SlyTqdm
-import sly_globals as g
+
 import sly_functions as f
+import sly_globals as g
 
 progress_bar = SlyTqdm()
 

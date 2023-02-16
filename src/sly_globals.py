@@ -1,13 +1,9 @@
 import os
 from distutils.util import strtobool
 
-from supervisely.sly_logger import logger
-
 import supervisely as sly
-from supervisely.io.fs import mkdir
-
-# debug
 from dotenv import load_dotenv
+from supervisely.io.fs import mkdir
 
 if sly.is_development():
     load_dotenv("local.env")

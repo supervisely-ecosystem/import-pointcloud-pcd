@@ -1,16 +1,17 @@
 import os
-import open3d as o3d
 from pathlib import Path
-import supervisely as sly
 
+import open3d as o3d
+import supervisely as sly
 from supervisely.api.module_api import ApiField
 from supervisely.app.widgets import SlyTqdm
 from supervisely.imaging.image import SUPPORTED_IMG_EXTS
-from supervisely.io.fs import get_file_ext, get_file_name, get_file_name_with_ext
+from supervisely.io.fs import (get_file_ext, get_file_name,
+                               get_file_name_with_ext)
 from supervisely.io.json import load_json_file
 
-import src.sly_globals as g
 import src.download_progress as download_progress
+import src.sly_globals as g
 
 
 def get_project_name_from_input_path(input_path: str) -> str:
