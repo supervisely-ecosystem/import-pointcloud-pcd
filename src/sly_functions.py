@@ -17,8 +17,7 @@ def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
     if len(g.PROJECT_NAME) > 0:
         return g.PROJECT_NAME
-    # full_path_dir = os.path.dirname(input_path)
-    return os.path.basename(input_path)
+    return os.path.basename(os.path.normpath(input_path))
 
 
 def get_items_in_dataset(names: list, paths: list) -> tuple:
@@ -51,7 +50,6 @@ def download_project(api: sly.Api, input_path: str) -> str:
         api, g.TASK_ID, f"Downloading {input_path.strip('/')}", sizeb, is_size=True
     )
     api.file.download_directory(g.TEAM_ID, input_path, extract_dir, progress_cb)
-    return extract_dir
 
 
 def get_related_image_and_meta_paths(local_path_to_pcd_file: str, pcd_file_name: str) -> tuple:
@@ -102,7 +100,10 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
         file_related_image_path, file_related_image_meta_path = get_related_image_and_meta_paths(
             full_path_file, file_name
         )
-        ds_name = get_dataset_name(remote_file_path.lstrip("/"), g.DEFAULT_DATASET_NAME)
+        try:
+            ds_name = get_dataset_name(remote_file_path.lstrip("/"))
+        except:
+            ds_name = g.DEFAULT_DATASET_NAME
         if ds_name not in datasets_images_map.keys():
             datasets_images_map[ds_name] = {
                 "pcd_names": [],
@@ -224,12 +225,14 @@ def shutdown_app():
         sly.logger.info("Application shutdown successfully")
 
 
-def get_dataset_name(file_path, default="ds0"):
+def get_dataset_name(file_path: str, default: str = "ds0") -> str:
+    """Dataset name from image path."""
     dir_path = os.path.split(file_path)[0]
     ds_name = default
     path_parts = Path(dir_path).parts
     if len(path_parts) != 1:
-        if g.IS_ON_AGENT:
-            return path_parts[-1]
-        ds_name = path_parts[1]
+        if g.INPUT_PATH.startswith("/import/import-pointclouds-pcd/"):
+            ds_name = path_parts[3]
+        else:
+            ds_name = path_parts[-1]
     return ds_name
