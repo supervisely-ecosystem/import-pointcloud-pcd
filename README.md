@@ -77,8 +77,8 @@ my_project
     ├── kitti_0000000001.pcd
     └── related_images
         └── kitti_0000000001_pcd
-            ├── 0000000000.png
-            └── 0000000000.png.json
+            ├── kitti_0000000001.png
+            └── kitti_0000000001.png.json
 ```
 
 if you want to attach photo context to pcd file just create a directory `related_images` near the file. 
