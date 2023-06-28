@@ -29,5 +29,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          file: supervisely/docker/Dockerfile
+          file: Dockerfile
           tags: supervisely/import-pointcloud-pcd:${{ github.event.inputs.tag_version }}
