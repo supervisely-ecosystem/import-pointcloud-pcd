@@ -1,3 +1,0 @@
-supervisely==6.70.15
-open3d==0.15.2
-
