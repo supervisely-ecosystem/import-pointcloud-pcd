@@ -1,3 +1,3 @@
-supervisely==6.72.49
+supervisely==6.72.55
 open3d==0.15.2
 
