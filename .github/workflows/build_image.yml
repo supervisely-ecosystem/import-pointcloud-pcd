@@ -25,12 +25,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - 
-        name: Get repository name
-        run: echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
-      -
         name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
           file: Dockerfile
-          tags: supervisely/${{ env.REPOSITORY_NAME }}:${{ github.event.inputs.tag_version }}
+          tags: supervisely/pointcloud:${{ github.event.inputs.tag_version }}
