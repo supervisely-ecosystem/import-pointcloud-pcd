@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "categories": ["import", "pointclouds", "essentials"],
   "description": "Import pointclouds in PCD format without annotations",
-  "docker_image": "supervisely/import-pointcloud-pcd:1.0.1",
+  "docker_image": "supervisely/pointcloud:1.0.0",
   "main_script": "src/main.py",
   "task_location": "workspace_tasks",
   "icon_background": "#FFFFFF",
