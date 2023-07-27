@@ -1,26 +1,33 @@
 {
-  "name": "Import Pointclouds PCD",
-  "type": "app",
-  "version": "2.0.0",
-  "categories": ["import", "pointclouds", "essentials"],
-  "description": "Import pointclouds in PCD format without annotations",
-  "docker_image": "supervisely/pointcloud:1.0.0",
-  "main_script": "src/main.py",
-  "task_location": "workspace_tasks",
-  "icon_background": "#FFFFFF",
-  "modal_template": "src/modal.html",
-  "modal_template_state": {
-    "remove_source": true,
-    "project_name": ""
-  },
-  "icon": "https://user-images.githubusercontent.com/97401023/174861159-19c31267-a5a7-4757-9a88-fb60ed77eeef.png",
-  "icon_cover": true,
-  "headless": true,
-  "min_agent_version": "6.7.4",
-  "min_instance_version": "6.5.46",
-  "context_menu": {
-    "context_category": "Import",
-    "target": ["files_folder", "agent_folder"]
-  },
-  "poster": "https://user-images.githubusercontent.com/97401023/174845323-dbb77a33-c0a7-4162-a59e-da5092b488bd.png"
+    "name": "Import Pointclouds PCD",
+    "type": "app",
+    "version": "2.0.0",
+    "categories": [
+        "import",
+        "pointclouds",
+        "essentials"
+    ],
+    "description": "Import pointclouds in PCD format without annotations",
+    "docker_image": "supervisely/import-export:0.0.1",
+    "main_script": "src/main.py",
+    "task_location": "workspace_tasks",
+    "icon_background": "#FFFFFF",
+    "modal_template": "src/modal.html",
+    "modal_template_state": {
+        "remove_source": true,
+        "project_name": ""
+    },
+    "icon": "https://user-images.githubusercontent.com/97401023/174861159-19c31267-a5a7-4757-9a88-fb60ed77eeef.png",
+    "icon_cover": true,
+    "headless": true,
+    "min_agent_version": "6.7.4",
+    "min_instance_version": "6.5.46",
+    "context_menu": {
+        "context_category": "Import",
+        "target": [
+            "files_folder",
+            "agent_folder"
+        ]
+    },
+    "poster": "https://user-images.githubusercontent.com/97401023/174845323-dbb77a33-c0a7-4162-a59e-da5092b488bd.png"
 }
