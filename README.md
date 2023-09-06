@@ -32,7 +32,8 @@ Be aware that "remove files after successful import" flag is enabled by default,
 
 **Input files structure**
 
-Directory name defines project name, subdirectories define dataset names. Files in root directory will be moved to dataset with name "`ds0`".
+Directory name defines project name, subdirectories define dataset names. Files in root directory will be moved to dataset with name "`ds0`".<br>
+ℹ️ You can download the archive with data example [here](https://github.com/supervisely-ecosystem/import-pointcloud-pcd/files/12537340/my_pcd_project.zip).
 
 **Example 1. Import structure:**
 
