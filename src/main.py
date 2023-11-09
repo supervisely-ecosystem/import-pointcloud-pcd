@@ -1,3 +1,4 @@
+import os
 import supervisely as sly
 from supervisely import logger
 from supervisely.app.widgets import SlyTqdm
@@ -23,22 +24,52 @@ dir_info = g.api.file.list(g.TEAM_ID, g.INPUT_PATH)
 if len(dir_info) == 0:
     raise Exception(f"There are no files in selected directory: '{g.INPUT_PATH}'")
 
-project_name = f.get_project_name_from_input_path(g.INPUT_PATH)
+if len(dir_info) == 1 and f.is_archive(dir_info[0]["path"]):
+    raise Exception(
+        f"Please select directory with pointclouds. Selected file: '{dir_info[0]['path']}' is archive."
+    )
+
 f.download_project(g.api, g.INPUT_PATH)
 
 datasets_names, datasets_images_map = f.get_datasets_items_map(dir_info, g.STORAGE_DIR)
-project = g.api.project.create(
-    workspace_id=g.WORKSPACE_ID,
-    name=project_name,
-    type=sly.ProjectType.POINT_CLOUDS,
-    change_name_if_conflict=True,
-)
-for dataset_name in datasets_names:
-    dataset_info = g.api.dataset.create(
-        project_id=project.id, name=dataset_name, change_name_if_conflict=True
-    )
 
+if g.PROJECT_ID is None:
+    project_name = f.get_project_name_from_input_path(g.INPUT_PATH)
+
+    sly.logger.debug(f"Project name: {project_name}")
+
+    project = g.api.project.create(
+        workspace_id=g.WORKSPACE_ID,
+        name=project_name,
+        type=sly.ProjectType.POINT_CLOUDS,
+        change_name_if_conflict=True,
+    )
+else:
+    project = g.api.project.get_info_by_id(g.PROJECT_ID)
+
+
+dataset_info = None
+for dataset_name in datasets_names:
+    if g.DATASET_ID is not None and dataset_info is None:
+        dataset_info = g.api.dataset.get_info_by_id(g.DATASET_ID)
+    else:
+        dataset_info = g.api.dataset.create(
+            project_id=project.id, name=dataset_name, change_name_if_conflict=True
+        )
+    used_pcd_names = [pcd.name for pcd in g.api.pointcloud.get_list(dataset_info.id)]
+
+    checked_names = []
     pcd_names = datasets_images_map[dataset_name]["pcd_names"]
+    for pcd_name in pcd_names:
+        if pcd_name in used_pcd_names or pcd_name in checked_names:
+            temp_name, temp_ext = os.path.splitext(pcd_name)
+            new_file_name = f"{temp_name}_{sly.rand_str(5)}{temp_ext}"
+            sly.logger.warning(
+                f"Name {pcd_name} already exists in dataset {dataset_name}: renamed to {new_file_name}"
+            )
+            checked_names.append(new_file_name)
+        else:
+            checked_names.append(pcd_name)
     pcd_paths = datasets_images_map[dataset_name]["pcd_paths"]
     pcd_rel_images_paths = datasets_images_map[dataset_name]["pcd_related_images"]["images_paths"]
     pcd_rel_images_meta_paths = datasets_images_map[dataset_name]["pcd_related_images"][
@@ -51,7 +82,7 @@ for dataset_name in datasets_names:
             dataset_id=dataset_info.id,
             dataset_name=dataset_info.name,
             progress_bar=progress_bar,
-            pcd_names=pcd_names,
+            pcd_names=checked_names,
             pcd_paths=pcd_paths,
         )
 

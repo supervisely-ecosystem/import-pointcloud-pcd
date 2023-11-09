@@ -14,8 +14,8 @@
     "icon_background": "#FFFFFF",
     "modal_template": "src/modal.html",
     "modal_template_state": {
-        "remove_source": true,
-        "project_name": ""
+        "removeSource": true,
+        "projectName": ""
     },
     "icon": "https://user-images.githubusercontent.com/97401023/174861159-19c31267-a5a7-4757-9a88-fb60ed77eeef.png",
     "icon_cover": true,
@@ -26,7 +26,9 @@
         "context_category": "Import",
         "target": [
             "files_folder",
-            "agent_folder"
+            "agent_folder",
+            "point_cloud_project",
+            "point_cloud_dataset"
         ]
     },
     "poster": "https://user-images.githubusercontent.com/97401023/174845323-dbb77a33-c0a7-4162-a59e-da5092b488bd.png"
