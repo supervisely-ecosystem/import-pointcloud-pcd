@@ -16,6 +16,7 @@ logger.info(
         "context.teamId": g.TEAM_ID,
         "context.workspaceId": g.WORKSPACE_ID,
         "modal.state.slyFolder": g.INPUT_PATH,
+        "modal.state.files": g.INPUT_FILES,
     },
 )
 
