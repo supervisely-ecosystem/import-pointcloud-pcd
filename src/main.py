@@ -48,7 +48,7 @@ if g.PROJECT_ID is None:
 else:
     project = g.api.project.get_info_by_id(g.PROJECT_ID)
 
-
+pcd_cnt = 0
 dataset_info = None
 for dataset_name in datasets_names:
     if g.DATASET_ID is not None and dataset_info is None:
@@ -86,7 +86,7 @@ for dataset_name in datasets_names:
             pcd_names=checked_names,
             pcd_paths=pcd_paths,
         )
-
+        pcd_cnt += len(pointclouds_infos)
         if pcd_rel_images_paths.count(None) != len(pcd_rel_images_paths):
             f.upload_related_images(
                 api=g.api,
@@ -102,6 +102,9 @@ for dataset_name in datasets_names:
             f"structure, for subdirectories and duplicated file names"
         )
         continue
+
+if pcd_cnt == 0:
+    raise Exception("No pointclouds were uploaded. Please check directory's file structure.")
 
 if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
     g.api.file.remove(team_id=g.TEAM_ID, path=g.INPUT_PATH)
