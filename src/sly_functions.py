@@ -232,7 +232,10 @@ def get_dataset_name(file_path: str, default: str = "ds0") -> str:
     path_parts = Path(dir_path).parts
     if len(path_parts) != 1:
         if g.INPUT_PATH.startswith("/import/import-pointclouds-pcd/"):
-            ds_name = path_parts[3]
+            if len(path_parts) > 4:
+                ds_name = path_parts[4]
+            elif len(path_parts) > 3:
+                ds_name = path_parts[3]
         else:
             ds_name = path_parts[-1]
     return ds_name

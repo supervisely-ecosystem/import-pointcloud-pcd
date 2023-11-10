@@ -66,7 +66,7 @@ for dataset_name in datasets_names:
             temp_name, temp_ext = os.path.splitext(pcd_name)
             new_file_name = f"{temp_name}_{sly.rand_str(5)}{temp_ext}"
             sly.logger.warning(
-                f"Name {pcd_name} already exists in dataset {dataset_name}: renamed to {new_file_name}"
+                f"Name {pcd_name} already exists in dataset {dataset_info.name}: renamed to {new_file_name}"
             )
             checked_names.append(new_file_name)
         else:
