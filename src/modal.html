@@ -20,7 +20,7 @@
                                   state.datasetId = null
                               }
                             }"
-        >>
+        >
         <el-option key="new project" value="new project"> </el-option>
         <el-option key="existing project" value="existing project"> </el-option>
         <el-option key="existing dataset" value="existing dataset"> </el-option>
@@ -47,7 +47,7 @@
     </sly-field>
   </div>
   <div
-    v-if="state.dstProjectMode === 'new project'"
+    v-if="state.dstProjectMode === 'new project' && (context.slySelectedContext === 'files_folder' || state.prefNodeId)"
     class="fflex align-start"
     style="flex-direction: column; margin: 0 0 20px 0"
   >
