@@ -7,47 +7,36 @@
     >
     </sly-file-storage-upload>
   </div>
-  <div v-if="state.prefNodeId">
+  <div v-if="state.prefNodeId || context.slySelectedContext === 'files_folder'">
     <sly-field
       title="Result project"
-      description="Define destination project and/or dataset"
+      description="Define destination project"
     >
-      <div class="fflex">
-        <el-radio
-          class="radio"
-          v-model="state.dstProjectMode"
-          label="newProject"
-          @input="(val) => {
-                              if (val === 'newProject') {
-                                  state.dstDatasetMode = 'newDataset';
-                                  state.slyProjectId = ''
-                              }
-                            }"
-        >
-          Create new project
-        </el-radio>
-        <el-radio
-          class="radio"
-          v-model="state.dstProjectMode"
-          label="existingProject"
-          @input="(val) => {
-                              if (val === 'existingProject') {
-                                  state.dstDatasetMode = 'newDataset';
+      <el-select v-model="state.dstProjectMode">
+        <el-option
+          key="new project"
+          value="new project"
+          @change="(val) => {
+                              if (val === 'new project') {
+                                  state.slyProjectId = '';
                                   state.slyDatasetId = ''
                               }
                             }"
-          >Add to existing project
-        </el-radio>
-        <el-radio
-          class="radio"
-          v-model="state.dstProjectMode"
-          label="existingDataset"
-          >Add to existing dataset
-        </el-radio>
-      </div>
+        > </el-option>
+        <el-option
+          key="existing project"
+          value="existing project"
+          @change="(val) => {
+                              if (val === 'existing project') {
+                                  state.slyDatasetId = ''
+                              }
+                            }"
+        > </el-option>
+        <el-option key="existing dataset" value="existing dataset"> </el-option>
+      </el-select>
       <div class="mt5">
         <div
-          v-if="state.dstProjectMode === 'existingProject' || state.dstProjectMode === 'existingDataset'"
+          v-if="state.dstProjectMode === 'existing dataset' || state.dstProjectMode === 'existing project'" 
         >
           <sly-select-project
             :workspace-id="context.workspaceId"
@@ -56,7 +45,7 @@
           >
           </sly-select-project>
         </div>
-        <div v-if="state.dstProjectMode === 'existingDataset'">
+        <div v-if="state.dstProjectMode === 'existing dataset'">
           <sly-select-dataset
             :project-id="state.slyProjectId"
             :datasets.sync="state.slyDatasetId"
@@ -67,7 +56,7 @@
     </sly-field>
   </div>
   <div
-    v-if="!state.slyProjectId"
+    v-if="state.dstProjectMode === 'new project'"
     class="fflex align-start"
     style="flex-direction: column; margin: 0 0 20px 0"
   >
