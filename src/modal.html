@@ -8,35 +8,26 @@
     </sly-file-storage-upload>
   </div>
   <div v-if="state.prefNodeId || context.slySelectedContext === 'files_folder'">
-    <sly-field
-      title="Result project"
-      description="Define destination project"
-    >
-      <el-select v-model="state.dstProjectMode">
-        <el-option
-          key="new project"
-          value="new project"
-          @change="(val) => {
+    <sly-field title="Result project" description="Define destination project">
+      <el-select
+        v-model="state.dstProjectMode"
+        @change="(val) => {
                               if (val === 'new project') {
-                                  state.projectId = '';
-                                  state.datasetId = ''
-                              }
-                            }"
-        > </el-option>
-        <el-option
-          key="existing project"
-          value="existing project"
-          @change="(val) => {
+                                  state.projectId = null;
+                                  state.datasetId = null
+                              };
                               if (val === 'existing project') {
-                                  state.datasetId = ''
+                                  state.datasetId = null
                               }
                             }"
-        > </el-option>
+        >>
+        <el-option key="new project" value="new project"> </el-option>
+        <el-option key="existing project" value="existing project"> </el-option>
         <el-option key="existing dataset" value="existing dataset"> </el-option>
       </el-select>
       <div class="mt5">
         <div
-          v-if="state.dstProjectMode === 'existing dataset' || state.dstProjectMode === 'existing project'" 
+          v-if="state.dstProjectMode === 'existing dataset' || state.dstProjectMode === 'existing project'"
         >
           <sly-select-project
             :workspace-id="context.workspaceId"
