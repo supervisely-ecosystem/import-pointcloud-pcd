@@ -1,7 +1,7 @@
 <div>
   <div>
     <sly-file-storage-upload
-      v-if="context.slySelectedContext !== 'files_folder' && !state.prefNodeId"
+      v-if="context.slySelectedContext !== 'files_folder' && !state.prefNodeId && !state.slyFolder"
       :options="{ folder: '/import/import-pointclouds-pcd/' + context.formId + '/' }"
       @files-uploaded="state.files = '/import/import-pointclouds-pcd/' + context.formId + '/'"
     >
