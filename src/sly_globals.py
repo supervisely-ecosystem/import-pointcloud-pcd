@@ -20,8 +20,10 @@ REMOVE_SOURCE = bool(strtobool(os.getenv("modal.state.removeSource")))
 PROJECT_NAME = os.environ.get("modal.state.projectName")
 
 # if existing project (or dataset) is selected
-PROJECT_ID = os.environ.get("modal.state.slyProjectId") or None
-DATASET_ID = os.environ.get("modal.state.slyDatasetId") or None
+SLY_PROJECT_ID = os.environ.get("modal.state.slyProjectId") or None
+SLY_DATASET_ID = os.environ.get("modal.state.slyDatasetId") or None
+PROJECT_ID = os.environ.get("modal.state.projectId") or SLY_PROJECT_ID
+DATASET_ID = os.environ.get("modal.state.datasetId") or SLY_DATASET_ID
 
 if PROJECT_ID is not None:
     PROJECT_ID = int(PROJECT_ID)

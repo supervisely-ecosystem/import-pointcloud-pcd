@@ -1,7 +1,7 @@
 <div>
   <div>
     <sly-file-storage-upload
-      v-if="state.slyProjectId && !state.prefNodeId"
+      v-if="context.slySelectedContext !== 'files_folder' && !state.prefNodeId"
       :options="{ folder: '/import/import-pointclouds-pcd/' + context.formId + '/' }"
       @files-uploaded="state.files = '/import/import-pointclouds-pcd/' + context.formId + '/'"
     >
@@ -18,8 +18,8 @@
           value="new project"
           @change="(val) => {
                               if (val === 'new project') {
-                                  state.slyProjectId = '';
-                                  state.slyDatasetId = ''
+                                  state.projectId = '';
+                                  state.datasetId = ''
                               }
                             }"
         > </el-option>
@@ -28,7 +28,7 @@
           value="existing project"
           @change="(val) => {
                               if (val === 'existing project') {
-                                  state.slyDatasetId = ''
+                                  state.datasetId = ''
                               }
                             }"
         > </el-option>
@@ -40,15 +40,15 @@
         >
           <sly-select-project
             :workspace-id="context.workspaceId"
-            :project-id.sync="state.slyProjectId"
+            :project-id.sync="state.projectId"
             :options="{availableTypes: ['point_clouds']}"
           >
           </sly-select-project>
         </div>
         <div v-if="state.dstProjectMode === 'existing dataset'">
           <sly-select-dataset
-            :project-id="state.slyProjectId"
-            :datasets.sync="state.slyDatasetId"
+            :project-id="state.projectId"
+            :datasets.sync="state.datasetId"
             :options="{multiple: false, valueProperty: 'id'}"
           ></sly-select-dataset>
         </div>
