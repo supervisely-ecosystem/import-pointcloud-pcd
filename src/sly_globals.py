@@ -31,7 +31,6 @@ if DATASET_ID is not None:
 if INPUT_PATH:
     IS_ON_AGENT = api.file.is_on_agent(INPUT_PATH)
 
-sly.logger.info(f"INPUT_PATH: {INPUT_PATH}")
 
 DEFAULT_DATASET_NAME = "ds0"
 ALLOWED_POINTCLOUD_EXTENSIONS = [".pcd"]
