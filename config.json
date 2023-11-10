@@ -8,7 +8,7 @@
         "essentials"
     ],
     "description": "Import pointclouds in PCD format without annotations",
-    "docker_image": "supervisely/import-export:0.0.5",
+    "docker_image": "supervisely/import-export:6.72.180",
     "main_script": "src/main.py",
     "task_location": "workspace_tasks",
     "icon_background": "#FFFFFF",
