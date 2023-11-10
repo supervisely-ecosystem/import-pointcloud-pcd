@@ -16,7 +16,8 @@
     "modal_template_state": {
       "removeSource": true,
       "projectName": "",
-      "files": ""
+      "files": "",
+      "dstProjectMode": "new project"
     },
     "icon": "https://user-images.githubusercontent.com/97401023/174861159-19c31267-a5a7-4757-9a88-fb60ed77eeef.png",
     "icon_cover": true,
