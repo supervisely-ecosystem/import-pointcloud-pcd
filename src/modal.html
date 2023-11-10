@@ -1,18 +1,77 @@
 <div>
-    <div class="fflex align-start" style="flex-direction: column; margin: 0 0 20px 0">
-      <sly-field 
-                   title="Result Project Name"
-                   description="Enter project name manually (optional) or keep empty to generate it automatically">
-      </sly-field>
-      <el-input placeholder="Enter Project Name" v-model="state.project_name"></el-input>
-        
-    </div>
+  <div>
+    <sly-file-storage-upload
+      v-if="context.slySelectedContext !== 'files_folder' && !state.prefNodeId"
+      :options="{ folder: '/import/import-pointclouds-pcd/' + context.formId + '/' }"
+      @files-uploaded="state.files = '/import/import-pointclouds-pcd/' + context.formId + '/'"
+    >
+    </sly-file-storage-upload>
+  </div>
+  <div v-if="state.prefNodeId || context.slySelectedContext === 'files_folder'">
+    <sly-field title="Result project" description="Define destination project">
+      <el-select
+        v-model="state.dstProjectMode"
+        @change="(val) => {
+                              if (val === 'new project') {
+                                  state.projectId = null;
+                                  state.datasetId = null
+                              };
+                              if (val === 'existing project') {
+                                  state.datasetId = null
+                              }
+                            }"
+        >
+        <el-option key="new project" value="new project"> </el-option>
+        <el-option key="existing project" value="existing project"> </el-option>
+        <el-option key="existing dataset" value="existing dataset"> </el-option>
+      </el-select>
+      <div class="mt5">
+        <div
+          v-if="state.dstProjectMode === 'existing dataset' || state.dstProjectMode === 'existing project'"
+        >
+          <sly-select-project
+            :workspace-id="context.workspaceId"
+            :project-id.sync="state.projectId"
+            :options="{availableTypes: ['point_clouds']}"
+          >
+          </sly-select-project>
+        </div>
+        <div v-if="state.dstProjectMode === 'existing dataset'">
+          <sly-select-dataset
+            :project-id="state.projectId"
+            :datasets.sync="state.datasetId"
+            :options="{multiple: false, valueProperty: 'id'}"
+          ></sly-select-dataset>
+        </div>
+      </div>
+    </sly-field>
+  </div>
+  <div
+    v-if="state.dstProjectMode === 'new project' && (context.slySelectedContext === 'files_folder' || state.prefNodeId)"
+    class="fflex align-start"
+    style="flex-direction: column; margin: 0 0 20px 0"
+  >
+    <sly-field
+      title="Result Project Name"
+      description="Enter project name manually (optional) or keep empty to generate it automatically"
+    >
+    </sly-field>
+    <el-input
+      placeholder="Enter Project Name"
+      v-model="state.projectName"
+    ></el-input>
+  </div>
 
-    <div class="fflex align-start" v-if="!state.prefNodeId">
-        <el-checkbox v-model="state.remove_source" class="mt10 mr10"></el-checkbox>
-        <sly-field class="mt20"
-                   title="Remove temporary files after successful import"
-                   description="Removes source directory from Team Files after successful import">
-        </sly-field>
-    </div>
+  <div class="mt10 mb10" v-if="!state.prefNodeId">
+    <el-checkbox v-model="state.removeSource"
+      >Remove source files from Team Files after successful import</el-checkbox
+    >
+  </div>
+  <div>
+    <i class="zmdi zmdi-alert-triangle" style="color: #ed4242"></i>
+    <span style="color: 3f3f3f"
+      >Archives are not supported. Please upload a folder with .pcd files or
+      subfolders with .pcd files.
+    </span>
+  </div>
 </div>

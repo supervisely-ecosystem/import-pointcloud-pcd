@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-import open3d as o3d
 import supervisely as sly
 from supervisely.api.module_api import ApiField
 from supervisely.app.widgets import SlyTqdm
@@ -91,7 +90,8 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
         if file_ext not in g.ALLOWED_POINTCLOUD_EXTENSIONS:
             if file_ext not in SUPPORTED_IMG_EXTS and file_ext != ".json":
                 sly.logger.warn(
-                    f"File skipped '{full_path_file}': {file_ext} is not supported. Supported extensions: {g.ALLOWED_POINTCLOUD_EXTENSIONS}"
+                    f"File skipped '{full_path_file}': {file_ext} is not supported. "
+                    f"Supported extensions: {g.ALLOWED_POINTCLOUD_EXTENSIONS}."
                 )
             continue
 
@@ -232,7 +232,12 @@ def get_dataset_name(file_path: str, default: str = "ds0") -> str:
     path_parts = Path(dir_path).parts
     if len(path_parts) != 1:
         if g.INPUT_PATH.startswith("/import/import-pointclouds-pcd/"):
-            ds_name = path_parts[3]
+            if len(path_parts) > 4:
+                ds_name = path_parts[4]
         else:
             ds_name = path_parts[-1]
     return ds_name
+
+
+def is_archive(path):
+    return get_file_ext(path) in [".zip", ".tar"] or path.endswith(".tar.gz")
