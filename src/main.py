@@ -51,12 +51,13 @@ else:
 pcd_cnt = 0
 dataset_info = None
 for dataset_name in datasets_names:
-    if g.DATASET_ID is not None and dataset_info is None:
-        dataset_info = g.api.dataset.get_info_by_id(g.DATASET_ID)
-    else:
+    if g.DATASET_ID is None:
         dataset_info = g.api.dataset.create(
             project_id=project.id, name=dataset_name, change_name_if_conflict=True
         )
+    else:
+        if dataset_info is None:
+            dataset_info = g.api.dataset.get_info_by_id(g.DATASET_ID)
     used_pcd_names = [pcd.name for pcd in g.api.pointcloud.get_list(dataset_info.id)]
 
     checked_names = []
