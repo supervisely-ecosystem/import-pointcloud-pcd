@@ -5,6 +5,7 @@ from supervisely.app.widgets import SlyTqdm
 
 import sly_functions as f
 import sly_globals as g
+import workflow as w
 
 progress_bar = SlyTqdm()
 
@@ -113,5 +114,9 @@ if g.REMOVE_SOURCE and not g.IS_ON_AGENT:
     sly.logger.info(msg=f"Source directory: '{source_dir_name}' was successfully removed.")
 
 g.api.task.set_output_project(task_id=g.TASK_ID, project_id=project.id, project_name=project.name)
+if g.DATASET_ID:
+    w.workflow_output(g.api, g.DATASET_ID, type="dataset")
+else:
+    w.workflow_output(g.api, project.id, type="project")
 
 f.shutdown_app()
