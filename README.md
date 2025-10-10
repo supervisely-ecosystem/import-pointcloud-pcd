@@ -8,7 +8,7 @@
   <a href="#Demo-data">Demo Data</a>
 </p>
 
-[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervisely.com/apps/supervisely-ecosystem/import-pointcloud-pcd)
+[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](../../../../supervisely-ecosystem/import-pointcloud-pcd)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervisely.com/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/import-pointcloud-pcd)
 [![views](https://app.supervisely.com/img/badges/views/supervisely-ecosystem/import-pointcloud-pcd.png)](https://supervisely.com)
