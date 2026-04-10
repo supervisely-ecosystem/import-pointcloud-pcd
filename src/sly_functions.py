@@ -20,13 +20,13 @@ def get_project_name_from_input_path(input_path: str) -> str:
 
 
 def get_items_in_dataset(names: list, paths: list) -> tuple:
-    """Get .pcd files."""
+    """Get .pcd, .ply, .las, .laz files."""
     res_batch_names = []
     res_batch_paths = []
     for name, path in zip(names, paths):
         try:
             file_ext = get_file_ext(path).lower()
-            if file_ext == ".pcd":
+            if file_ext in [".pcd", ".ply", ".las", ".laz"]:
                 res_batch_names.append(name)
                 res_batch_paths.append(path)
         except Exception as e:
@@ -37,7 +37,7 @@ def get_items_in_dataset(names: list, paths: list) -> tuple:
 
 
 def download_project(api: sly.Api, input_path: str) -> str:
-    """Download target directory with pcd files."""
+    """Download target directory with point cloud files."""
     if g.IS_ON_AGENT:
         agent_id, cur_files_path = api.file.parse_agent_id_and_path(input_path)
     else:

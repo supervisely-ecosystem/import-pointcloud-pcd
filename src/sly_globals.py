@@ -35,7 +35,7 @@ if INPUT_PATH:
 
 
 DEFAULT_DATASET_NAME = "ds0"
-ALLOWED_POINTCLOUD_EXTENSIONS = [".pcd"]
+ALLOWED_POINTCLOUD_EXTENSIONS = [".pcd", ".ply", ".las", ".laz"]
 
 STORAGE_DIR = os.path.join(sly.app.get_data_dir(), "storage_dir")
 mkdir(STORAGE_DIR, True)
