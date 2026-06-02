@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://github.com/supervisely-ecosystem/import-pointcloud-pcd/releases/download/v1.2.3/import-pointcloud-pcd-poster.png"/>  
+<img src="https://github.com/supervisely-ecosystem/import-pointcloud-pcd/releases/download/v1.2.3/import-point-clouds.jpg"/>  
 
 # Import Point Clouds PCD
 
