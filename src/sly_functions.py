@@ -11,6 +11,12 @@ from supervisely.io.json import load_json_file
 import src.download_progress as download_progress
 import src.sly_globals as g
 
+# Files found in the input that will not be imported (unsupported, or images/json that are
+# not a related image of any point cloud). Kept here rather than in sly_globals because
+# main.py and this module import sly_globals under two different module names.
+# The source is only removed from Team Files when this stays empty.
+SKIPPED_FILES = []
+
 
 def get_project_name_from_input_path(input_path: str) -> str:
     """Returns project name from target sly folder name."""
@@ -81,6 +87,7 @@ def get_related_image_and_meta_paths(local_path_to_pcd_file: str, pcd_file_name:
 def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
     """Creates a dictionary map based on api response from the target sly folder data."""
     datasets_images_map = {}
+    other_files = []  # images / json: imported only as related images of a point cloud
     for file_info in dir_info:
         remote_file_path = file_info["path"]
         if g.IS_ON_AGENT:
@@ -93,6 +100,9 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
                     f"File skipped '{full_path_file}': {file_ext} is not supported. "
                     f"Supported extensions: {g.ALLOWED_POINTCLOUD_EXTENSIONS}."
                 )
+                SKIPPED_FILES.append(remote_file_path)
+            else:
+                other_files.append((full_path_file, remote_file_path))
             continue
 
         file_name = get_file_name_with_ext(full_path_file)
@@ -132,6 +142,20 @@ def get_datasets_items_map(dir_info: list, storage_dir) -> tuple:
         datasets_images_map[ds_name]["pcd_related_images"]["images_metas_paths"].append(
             file_related_image_meta_path
         )
+
+    related_files = set()
+    for ds in datasets_images_map.values():
+        for key in ("images_paths", "images_metas_paths"):
+            related_files.update(
+                os.path.normpath(p) for p in ds["pcd_related_images"][key] if p is not None
+            )
+    for full_path_file, remote_file_path in other_files:
+        if os.path.normpath(full_path_file) not in related_files:
+            sly.logger.warn(
+                f"File skipped '{full_path_file}': it is not a related image (or its meta) "
+                "of any point cloud."
+            )
+            SKIPPED_FILES.append(remote_file_path)
 
     datasets_names = list(datasets_images_map.keys())
     return datasets_names, datasets_images_map
